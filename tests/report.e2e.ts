@@ -15,6 +15,15 @@ test.beforeEach(async ({ page }) => {
   )
 })
 
+test('loads the mdi-airplane favicon from the GitHub Pages base path', async ({ page }) => {
+  await page.goto('./')
+  const favicon = page.locator('link[rel="icon"]')
+  await expect(favicon).toHaveAttribute('href', '/travel-expense-report/favicon.svg')
+  const response = await page.request.get('/travel-expense-report/favicon.svg')
+  expect(response.ok()).toBe(true)
+  expect(await response.text()).toContain('M20.56 3.91')
+})
+
 async function chooseDate(page: Page, label: string) {
   await page.getByLabel(label, { exact: true }).focus()
   await page.keyboard.press('ArrowDown')
