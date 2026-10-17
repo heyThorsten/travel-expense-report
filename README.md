@@ -21,6 +21,10 @@ fallback. Always check calculated results against your applicable travel policy.
 - [User guide / Benutzeranleitung (Deutsch)](docs/USER_GUIDE.de.md)
 - [Deployment to GitHub Pages](docs/DEPLOYMENT.md)
 
+## License
+
+This project is licensed under the [Zero-Clause BSD (0BSD)](LICENSE).
+
 ## Development
 
 Use Node.js 22.12 or later in the Node.js 22 release line and npm; CI uses
