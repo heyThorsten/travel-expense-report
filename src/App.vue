@@ -73,6 +73,18 @@ const {
       <v-container class="report-container py-8 py-sm-12">
         <header class="mb-6 d-flex align-center justify-space-between flex-wrap ga-4">
           <h1 class="report-title text-h4 mb-0">Reisekostenabrechnung</h1>
+          <v-btn
+            href="https://github.com/heyThorsten/travel-expense-report/blob/main/docs/USER_GUIDE.de.md"
+            target="_blank"
+            rel="noopener"
+            variant="tonal"
+            color="primary"
+            class="help-link text-none"
+          >
+            <span class="d-flex flex-column align-start">
+              <span class="text-body-2 font-weight-medium">Hilfe &amp; Benutzerhandbuch</span>
+            </span>
+          </v-btn>
           <input
             ref="reportArchiveInput"
             class="d-none"
@@ -198,5 +210,11 @@ const {
   min-width: 0;
   max-width: 100%;
   overflow-wrap: anywhere;
+}
+
+.help-link {
+  height: auto;
+  min-height: 48px;
+  white-space: normal;
 }
 </style>
