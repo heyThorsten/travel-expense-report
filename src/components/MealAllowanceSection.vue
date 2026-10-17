@@ -6,6 +6,9 @@ import type { MealAllowanceDay } from '../domain/mealAllowance'
 import type { MealSelections } from '../domain/report'
 
 const props = defineProps<{ mealAllowanceDays: MealAllowanceDay[] }>()
+defineEmits<{
+  removeDay: [date: string]
+}>()
 const selections = defineModel<Record<string, MealSelections>>('selections', { required: true })
 const mealAllowanceTotalMinor = computed(() =>
   props.mealAllowanceDays.length === 0
@@ -121,7 +124,7 @@ function formatMealDate(date: string): string {
             />
           </div>
         </v-col>
-        <v-col cols="12" md="3" class="text-md-right">
+        <v-col cols="12" md="2" class="text-md-right">
           <v-alert
             v-if="day.baseAmountMinor === null"
             type="error"
@@ -142,6 +145,18 @@ function formatMealDate(date: string): string {
               }}
             </strong>
           </div>
+        </v-col>
+        <v-col cols="12" md="1" class="d-flex justify-end">
+          <v-btn
+            type="button"
+            size="small"
+            color="error"
+            variant="text"
+            :aria-label="`Verpflegungsmehraufwand für ${formatMealDate(day.date)} entfernen`"
+            @click="$emit('removeDay', day.date)"
+          >
+            Entfernen
+          </v-btn>
         </v-col>
       </v-row>
     </v-card-text>

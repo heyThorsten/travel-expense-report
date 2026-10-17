@@ -69,6 +69,7 @@ export interface ReportDraft {
   trip: TripDetails
   itineraryStops: ItineraryStop[]
   mealSelectionsByDate: Record<string, MealSelections>
+  excludedMealAllowanceDates: string[]
   expenses: ExpenseDraft[]
   advanceMinor: number | null
   reimbursedMinor: number | null
@@ -96,6 +97,7 @@ export function createEmptyReport(): ReportDraft {
       },
     ],
     mealSelectionsByDate: {},
+    excludedMealAllowanceDates: [],
     expenses: [],
     advanceMinor: null,
     reimbursedMinor: null,

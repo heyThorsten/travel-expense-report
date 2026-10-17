@@ -66,6 +66,9 @@ berechneten Tagesbeträgen:
 - Markieren Sie unter **Gestellte Mahlzeit** jeweils **Frühstück**,
   **Mittagessen** oder **Abendessen**, wenn eine entsprechende Mahlzeit gestellt
   wurde. Dadurch vermindert sich der angezeigte Betrag.
+- Mit **Entfernen** schließen Sie den Verpflegungsmehraufwand für den
+  jeweiligen Tag aus der Berechnung und dem Bericht aus. Die Auswahl bleibt
+  beim Speichern und erneuten Öffnen des Berichts erhalten.
 
 Kontrollieren Sie Datum, Land/Region, Kürzungen und Gesamtbetrag. Die App ersetzt
 keine Prüfung der geltenden Reisekostenrichtlinie oder steuerlichen Regelungen.

@@ -216,6 +216,20 @@ function readReport(value: unknown): ArchivedReport {
   }
   const mealSelectionsByDate = Object.fromEntries(mealSelectionEntries)
 
+  const excludedMealAllowanceDates =
+    value.excludedMealAllowanceDates === undefined
+      ? []
+      : readArray(
+          value.excludedMealAllowanceDates,
+          'Ausgeschlossene Verpflegungstage',
+        ).map((date, index) =>
+          readString(date, `Ausgeschlossener Verpflegungstag ${index + 1}`),
+        )
+  requireUniqueValues(
+    excludedMealAllowanceDates,
+    'Die ausgeschlossenen Verpflegungstage enthalten doppelte oder leere Daten.',
+  )
+
   const expenses = readArray(value.expenses, 'Ausgaben').map(readExpense)
   requireUniqueValues(
     expenses.map((expense) => expense.id),
@@ -237,6 +251,7 @@ function readReport(value: unknown): ArchivedReport {
     },
     itineraryStops,
     mealSelectionsByDate,
+    excludedMealAllowanceDates,
     expenses,
     advanceMinor: readNullableInteger(value.advanceMinor, 'Vorschuss'),
     reimbursedMinor: readNullableInteger(

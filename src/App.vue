@@ -42,7 +42,7 @@ const mealAllowanceDays = computed(() =>
         report.itineraryStops,
         destinationCountries.value,
         report.mealSelectionsByDate,
-      ),
+      ).filter(day => !report.excludedMealAllowanceDates.includes(day.date)),
 )
 const reportArchiveInput = useTemplateRef<HTMLInputElement>('reportArchiveInput')
 const {
@@ -125,6 +125,7 @@ const {
                 <MealAllowanceSection
                   v-model:selections="report.mealSelectionsByDate"
                   :meal-allowance-days="mealAllowanceDays"
+                  @remove-day="report.excludedMealAllowanceDates.push($event)"
                 />
               </template>
               <v-divider class="my-4" />

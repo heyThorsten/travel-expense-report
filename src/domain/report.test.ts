@@ -24,6 +24,7 @@ describe('createEmptyReport', () => {
         },
       ],
       mealSelectionsByDate: {},
+      excludedMealAllowanceDates: [],
       expenses: [],
       advanceMinor: null,
       reimbursedMinor: null,

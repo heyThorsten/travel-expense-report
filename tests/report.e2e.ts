@@ -103,6 +103,30 @@ test('keyboard time apply/cancel and itinerary continuation preserve values', as
   })
 })
 
+test('meal allowance can be removed per day and stays removed in saved reports', async ({ page }) => {
+  await fillReport(page)
+  await page.getByRole('button', {
+    name: 'Verpflegungsmehraufwand für Samstag, 17. Oktober 2026 entfernen',
+    exact: true,
+  }).click()
+  await expect(page.getByRole('heading', { name: 'Verpflegungsmehraufwand', exact: true }))
+    .toHaveCount(0)
+
+  const backup = await download(page, 'Bericht als ZIP speichern')
+  const backupBytes = await downloadBytes(backup)
+  const manifest = JSON.parse(strFromU8(unzipSync(backupBytes)['report.json']!))
+  expect(manifest.report.excludedMealAllowanceDates).toEqual(['2026-10-17'])
+
+  page.once('dialog', (dialog) => dialog.accept())
+  await page.locator('input[type=file]').first().setInputFiles({
+    name: 'removed-meal-allowance.reisekosten',
+    mimeType: 'application/zip',
+    buffer: backupBytes,
+  })
+  await expect(page.getByRole('heading', { name: 'Verpflegungsmehraufwand', exact: true }))
+    .toHaveCount(0)
+})
+
 test('does not overflow narrow viewports', async ({ page }) => {
   await page.goto('./')
   for (const width of [320, 375, 390, 768, 1280]) {

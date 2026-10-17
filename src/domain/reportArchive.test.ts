@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate'
 import {
   createReportArchive,
   openReportArchive,
@@ -39,6 +40,7 @@ describe('report archive', () => {
       lunch: true,
       dinner: false,
     }
+    report.excludedMealAllowanceDates = ['2026-10-18']
     const pngBytes = decodeBase64(
       'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/lWQAAAAASUVORK5CYII=',
     )
@@ -80,6 +82,9 @@ describe('report archive', () => {
     expect(restored.trip).toEqual(report.trip)
     expect(restored.itineraryStops).toEqual(report.itineraryStops)
     expect(restored.mealSelectionsByDate).toEqual(report.mealSelectionsByDate)
+    expect(restored.excludedMealAllowanceDates).toEqual(
+      report.excludedMealAllowanceDates,
+    )
     expect(restored.expenses[0]).toMatchObject({
       id: 'expense-1',
       category: 'transport',
@@ -106,6 +111,26 @@ describe('report archive', () => {
     await expect(openReportArchive(damagedArchive)).rejects.toThrow(
       'Die ZIP-Datei ist beschädigt oder wird nicht unterstützt.',
     )
+  })
+
+  it('opens older archives without excluded meal allowance dates', async () => {
+    const bytes = await createReportArchive(createEmptyReport())
+    const entries = unzipSync(bytes)
+    const manifest = JSON.parse(strFromU8(entries['report.json']!))
+    delete manifest.report.excludedMealAllowanceDates
+    const legacyBytes = zipSync(
+      { 'report.json': strToU8(JSON.stringify(manifest)) },
+      { level: 0 },
+    )
+    const archiveFile = new File(
+      [toArrayBuffer(legacyBytes)],
+      `legacy${REPORT_ARCHIVE_EXTENSION}`,
+      { type: 'application/zip' },
+    )
+
+    const restored = await openReportArchive(archiveFile)
+
+    expect(restored.excludedMealAllowanceDates).toEqual([])
   })
 
   it('rejects archives with a different file extension', async () => {
